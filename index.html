@@ -1,452 +1,455 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111111">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010">
 <title>KOLENIST TEAM</title>
-
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:#101010;
-  color:white;
-  font-family:Arial,sans-serif;
+:root {
+  --gold:#d8b77b;
+  --bg:#101010;
+  --card:#202020;
+  --muted:#aaa;
 }
-main{
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:white;
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+}
+main {
   max-width:650px;
   margin:auto;
-  padding:20px 16px 100px;
+  padding:22px 17px 110px;
 }
-h1{letter-spacing:2px;font-size:25px}
-h2{font-size:21px}
-p{line-height:1.5}
-.muted{color:#aaa}
-.card{
-  background:#202020;
-  padding:18px;
-  margin:14px 0;
-  border:1px solid #383838;
-  border-radius:15px;
-}
-input,button{
-  width:100%;
-  font-size:16px;
-  padding:13px;
-  border-radius:10px;
-  margin:7px 0;
-}
-input{
-  background:#303030;
-  border:1px solid #555;
-  color:white;
-}
-button{
-  background:white;
-  color:#111;
-  border:0;
-  font-weight:bold;
-  cursor:pointer;
-}
-button.secondary{
-  background:#363636;
-  color:white;
-}
-button:disabled{opacity:.5}
-.hidden{display:none!important}
-.message{font-size:14px;color:#f2c875}
-.shift{
+header {
   display:flex;
   justify-content:space-between;
-  gap:12px;
-  background:#303030;
-  padding:13px;
-  border-radius:10px;
-  margin:8px 0;
+  align-items:center;
+  margin-bottom:25px;
 }
-.standby{color:#f2c875}
-.tabs{display:flex;gap:8px}
-.tabs button{font-size:14px}
-.calendar{
+.brand {
+  letter-spacing:3px;
+  color:var(--gold);
+  font-size:12px;
+  font-weight:700;
+}
+.logo {
+  font-size:29px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin:2px 0;
+}
+.muted { color:var(--muted); }
+.gold { color:var(--gold); }
+h2 { font-size:24px; margin:20px 0; }
+h3 { font-size:17px; margin:4px 0 12px; }
+p { line-height:1.5; }
+.card {
+  background:var(--card);
+  border:1px solid #353535;
+  border-radius:19px;
+  padding:19px;
+  margin:13px 0;
+}
+.hero {
+  background:linear-gradient(140deg,#363025,#202020 65%);
+  border-color:#5c4b30;
+}
+.eyebrow {
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:var(--gold);
+  font-weight:700;
+}
+.big {
+  font-size:32px;
+  font-weight:800;
+  margin:10px 0;
+}
+button,input { font:inherit; }
+button { border:0; cursor:pointer; }
+.primary {
+  background:var(--gold);
+  color:#17130e;
+  padding:14px;
+  border-radius:11px;
+  font-weight:750;
+  width:100%;
+}
+.secondary {
+  background:#353535;
+  color:white;
+  padding:13px;
+  border-radius:11px;
+  font-weight:650;
+}
+input {
+  background:#303030;
+  color:white;
+  border:1px solid #555;
+  border-radius:11px;
+  padding:13px;
+  width:100%;
+  margin:7px 0;
+}
+.hidden { display:none!important; }
+.grid2 {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+.tile {
+  background:#222;
+  border:1px solid #363636;
+  border-radius:16px;
+  padding:16px;
+  text-align:left;
+  color:white;
+  min-height:100px;
+}
+.tile .symbol {
+  font-size:25px;
+  color:var(--gold);
+  display:block;
+  margin-bottom:12px;
+}
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.shift {
+  padding:13px 0;
+  border-bottom:1px solid #363636;
+}
+.shift:last-child { border-bottom:0; }
+.chip {
+  font-size:12px;
+  padding:6px 9px;
+  border-radius:8px;
+  background:#393939;
+  white-space:nowrap;
+}
+.goldchip {
+  background:#51422c;
+  color:#f3d9a6;
+}
+.tabs {
+  display:flex;
+  gap:8px;
+  margin:14px 0;
+}
+.tabs button { flex:1; }
+.calendar {
   display:grid;
   grid-template-columns:repeat(7,1fr);
   gap:5px;
 }
-.day{
-  min-height:45px;
-  padding:7px 2px;
-  background:#303030;
-  color:white;
-}
-.day.selected{
-  outline:2px solid white;
-}
-.day.hasShift{
-  background:#555;
-}
-.weekday{
-  font-size:12px;
-  color:#aaa;
+.weekday {
   text-align:center;
+  color:#aaa;
+  font-size:11px;
   padding:8px 0;
 }
-nav{
+.day {
+  background:#303030;
+  color:white;
+  border-radius:9px;
+  min-height:43px;
+  padding:5px;
+}
+.day.mine { background:#57452d; }
+.day.selected { outline:2px solid var(--gold); }
+.day:disabled { opacity:.15; }
+.day small {
+  display:block;
+  color:#d8b77b;
+  font-size:9px;
+}
+nav {
   position:fixed;
   bottom:0;
   left:0;
   right:0;
+  background:#171717;
+  border-top:1px solid #343434;
   display:flex;
   justify-content:center;
-  background:#171717;
-  border-top:1px solid #444;
-  padding:10px 4px;
+  padding:10px 4px max(12px,env(safe-area-inset-bottom));
 }
-nav button{
-  width:auto;
-  background:transparent;
-  color:white;
-  font-size:12px;
-  padding:10px;
-  margin:0;
+nav button {
+  flex:1;
+  max-width:110px;
+  background:none;
+  color:#aaa;
+  font-size:11px;
+  padding:8px 1px;
 }
-nav button.active{
-  background:white;
-  color:#111;
+nav button.active { color:var(--gold); }
+nav .symbol {
+  display:block;
+  font-size:21px;
+  margin-bottom:4px;
 }
-label.task{
+.task {
   display:flex;
   align-items:center;
   gap:10px;
-  background:#303030;
   padding:12px;
+  background:#303030;
   border-radius:10px;
-  margin:8px 0;
+  margin:7px 0;
 }
-label.task input{width:auto}
-.small{font-size:12px}
+.task input { width:auto; }
+.notice {
+  font-size:13px;
+  color:#e4c58e;
+  line-height:1.5;
+}
 </style>
 </head>
-
 <body>
 <main>
 <header>
-<h1>KOLENIST TEAM</h1>
-<p class="muted">
-Bediening · Kolenist Bar & Grill
-</p>
+  <div>
+    <div class="brand">KOLENIST</div>
+    <div class="logo">TEAM</div>
+    <div class="muted" style="font-size:12px">
+      BAR & GRILL · BEDIENING
+    </div>
+  </div>
+  <div style="color:var(--gold);font-size:27px">✦</div>
 </header>
 
 <div id="setup" class="card hidden">
-<h2>App instellen</h2>
-<p>Vul eenmalig je Supabase Publishable key in.</p>
-<input id="setupKey"
-placeholder="sb_publishable_...">
-<button id="saveKey">Verbinden</button>
-<p id="setupMessage" class="message"></p>
-<p class="muted small">
-Gebruik nooit een secret key of service_role key.
-</p>
+  <h2>App instellen</h2>
+  <p>Plak je Supabase Publishable key uit Notities.</p>
+  <input id="key" placeholder="sb_publishable_...">
+  <button class="primary" id="saveKey">Verbinden</button>
+  <p class="notice" id="setupMsg"></p>
 </div>
 
 <div id="login" class="card hidden">
-<h2>Inloggen</h2>
-<p class="muted">
-Log in met je Supabase-testaccount.
-</p>
-<form id="loginForm">
-<input id="email"
-type="email"
-autocomplete="username"
-placeholder="E-mailadres"
-required>
-<input id="password"
-type="password"
-autocomplete="current-password"
-placeholder="Wachtwoord"
-required>
-<button id="loginButton" type="submit">
-Inloggen
-</button>
-</form>
-<p id="loginMessage" class="message"></p>
+  <div class="eyebrow">WELKOM TERUG</div>
+  <h2>Inloggen</h2>
+  <form id="loginForm">
+    <input id="email" type="email"
+      placeholder="E-mailadres" autocomplete="username" required>
+    <input id="password" type="password"
+      placeholder="Wachtwoord" autocomplete="current-password" required>
+    <button class="primary" type="submit">Inloggen</button>
+  </form>
+  <p class="notice" id="loginMsg"></p>
 </div>
 
 <div id="app" class="hidden">
 
 <section id="home">
-<h2>Welkom <span id="name"></span>!</h2>
-<div class="card">
-<h3>Focus van deze week</h3>
-<p>Gastvrijheid en een nette werkplek.</p>
-</div>
-<div class="card">
-<h3>Mijn volgende diensten</h3>
-<div id="upcoming"></div>
-</div>
-<div class="card">
-<h3>Mijn punten</h3>
-<h2 id="homePoints">0</h2>
-</div>
+  <div class="eyebrow">MIJN DASHBOARD</div>
+  <h2>Hoi, <span id="hello"></span>!</h2>
+
+  <div class="card hero">
+    <div class="eyebrow">MIJN VOLGENDE DIENST</div>
+    <div class="big" id="nextDate">—</div>
+    <div id="nextTime"
+      style="font-size:23px;margin-bottom:20px">—</div>
+    <button class="primary" onclick="go('roster')">
+      Bekijk mijn rooster
+    </button>
+  </div>
+
+  <div class="grid2">
+    <button class="tile" onclick="go('roster')">
+      <span class="symbol">▦</span>
+      <b>Teamrooster</b>
+      <div class="muted" style="font-size:12px;margin-top:5px">
+        Wie werkt wanneer?
+      </div>
+    </button>
+    <button class="tile" onclick="go('swap')">
+      <span class="symbol">⇄</span>
+      <b>Diensten ruilen</b>
+      <div class="muted" style="font-size:12px;margin-top:5px">
+        Ruilen of overnemen
+      </div>
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">TEAM VANDAAG</div>
+    <h3 id="todayTitle"></h3>
+    <div id="todayShifts"></div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">FOCUS VAN DE WEEK</div>
+    <h3>Gastvrijheid & een nette werkplek</h3>
+    <p class="muted">
+      Samen zorgen we voor een fijne ervaring
+      voor iedere gast.
+    </p>
+  </div>
 </section>
 
 <section id="roster" class="hidden">
-<h2>Rooster</h2>
-<div class="tabs">
-<button id="mineTab">Mijn diensten</button>
-<button id="monthTab" class="secondary">
-Maandkalender
-</button>
-</div>
+  <div class="eyebrow">PLANNING</div>
+  <h2>Rooster</h2>
 
-<div id="mineView" class="card">
-<h3>Mijn diensten</h3>
-<div id="myShifts"></div>
-</div>
+  <div class="tabs">
+    <button id="personalTab" class="primary"
+      onclick="setRosterMode('mine')">
+      Mijn diensten
+    </button>
+    <button id="teamTab" class="secondary"
+      onclick="setRosterMode('team')">
+      Teamrooster
+    </button>
+  </div>
 
-<div id="monthView" class="hidden">
-<div class="card">
-<h3>November 2026</h3>
-<div id="calendar" class="calendar"></div>
-</div>
-<div class="card">
-<h3 id="selectedTitle"></h3>
-<div id="dayShifts"></div>
-</div>
-</div>
+  <div class="card">
+    <div class="row">
+      <h3>November 2026</h3>
+      <span class="muted" style="font-size:12px">
+        2 t/m 30 nov.
+      </span>
+    </div>
+    <div id="calendar" class="calendar"></div>
+  </div>
 
-<p class="muted small">
-Dit rooster komt uit Supabase.
-Voorlopig staat alleen jouw testdienst
-in de database.
-</p>
+  <div class="card">
+    <h3 id="dayTitle"></h3>
+    <div id="dayEntries"></div>
+  </div>
+
+  <div class="card">
+    <h3 id="listTitle">Mijn diensten</h3>
+    <div id="shiftList"></div>
+  </div>
+</section>
+
+<section id="swap" class="hidden">
+  <div class="eyebrow">SAMEN PLANNEN</div>
+  <h2>Diensten ruilen</h2>
+
+  <div class="card hero">
+    <h3>Ruilen of laten overnemen</h3>
+    <p>
+      Straks kun je hier een collega vragen
+      om een dienst te ruilen of over te nemen.
+    </p>
+    <div class="notice">
+      De aanvraagfunctie wordt nog gekoppeld.
+      Er worden nu geen echte ruilverzoeken verstuurd.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Zo gaat het werken</h3>
+    <p>1. Jij kiest je dienst en een collega.</p>
+    <p>2. Je collega accepteert de aanvraag.</p>
+    <p>3. Babs keurt de wijziging goed.</p>
+    <p>4. Het rooster wordt automatisch aangepast.</p>
+  </div>
+
+  <div class="card">
+    <h3>Mijn diensten</h3>
+    <div id="swapShifts"></div>
+  </div>
 </section>
 
 <section id="tasks" class="hidden">
-<h2>Schoonmaaktaken</h2>
-<div id="taskList"></div>
-<div class="card">
-<input id="newTask"
-placeholder="Nieuwe schoonmaaktaak">
-<button id="addTask">Taak toevoegen</button>
-</div>
-<p class="muted small">
-Taken worden voorlopig alleen op dit
-toestel opgeslagen.
-</p>
-</section>
+  <div class="eyebrow">TEAMWORK</div>
+  <h2>Schoonmaaktaken</h2>
+  <div id="tasksList"></div>
 
-<section id="points" class="hidden">
-<h2>Punten & beloningen</h2>
-<div class="card">
-<h3>Mijn punten</h3>
-<h1 id="pointsTotal">0</h1>
-<p>10 punten per afgevinkte taak.</p>
-</div>
-<div class="card">
-<h3>Voorbeeldbeloningen</h3>
-<p>Gratis koffie — 50 punten</p>
-<p>Lunch naar keuze — 150 punten</p>
-</div>
+  <div class="card">
+    <h3>Nieuwe taak</h3>
+    <input id="taskInput"
+      placeholder="Bijvoorbeeld: koeling schoonmaken">
+    <button class="primary" id="addTask">
+      Taak toevoegen
+    </button>
+  </div>
+
+  <p class="muted" style="font-size:12px">
+    Taken en punten worden voorlopig alleen
+    op dit toestel opgeslagen.
+  </p>
 </section>
 
 <section id="profile" class="hidden">
-<h2>Mijn profiel</h2>
-<div class="card">
-<h3 id="profileName"></h3>
-<p id="profileRole"></p>
-<p id="profileEmail" class="muted"></p>
-<button id="logout" class="secondary">
-Uitloggen
-</button>
-</div>
+  <div class="eyebrow">MIJN ACCOUNT</div>
+  <h2>Profiel</h2>
+
+  <div class="card">
+    <h3 id="profileName"></h3>
+    <p id="profileRole" class="gold"></p>
+    <p id="profileEmail" class="muted"></p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">MIJN PUNTEN</div>
+    <div class="big" id="points">0</div>
+    <p class="muted">
+      10 punten per afgevinkte taak.
+      Beloningen volgen later.
+    </p>
+  </div>
+
+  <button class="secondary" style="width:100%"
+    id="logout">
+    Uitloggen
+  </button>
 </section>
 
 <nav>
-<button data-page="home" class="active">
-Home
-</button>
-<button data-page="roster">
-Rooster
-</button>
-<button data-page="tasks">
-Taken
-</button>
-<button data-page="points">
-Punten
-</button>
-<button data-page="profile">
-Profiel
-</button>
+  <button data-page="home" class="active">
+    <span class="symbol">⌂</span>Home
+  </button>
+  <button data-page="roster">
+    <span class="symbol">▦</span>Rooster
+  </button>
+  <button data-page="swap">
+    <span class="symbol">⇄</span>Ruilen
+  </button>
+  <button data-page="tasks">
+    <span class="symbol">✓</span>Taken
+  </button>
+  <button data-page="profile">
+    <span class="symbol">♙</span>Profiel
+  </button>
 </nav>
-
 </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const SUPABASE_URL =
-'https://nwcoorejmxcbrhiuymin.supabase.co';
+const URL='https://nwcoorejmxcbrhiuymin.supabase.co';
+const $=id=>document.getElementById(id);
+let db,user,profile,roster=[],mode='mine',selected=6;
 
-// Je mag hier je Publishable key invullen.
-// Je kunt hem ook via het instelscherm invoeren.
-const SUPABASE_KEY = 'VUL_HIER_JE_PUBLISHABLE_KEY_IN';
-
-const $ = id => document.getElementById(id);
-
-let db;
-let user;
-let profile;
-let shifts = [];
-let selectedDay = 6;
-
-function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g,
-    c => ({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#39;'
-    })[c]
-  );
+function safe(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  })[c]);
 }
 
 function show(id){
-  ['setup','login','app'].forEach(x=>{
-    $(x).classList.toggle('hidden',x!==id);
-  });
-}
-
-function connect(key){
-  if(!window.supabase){
-    throw new Error(
-      'Supabase kon niet geladen worden.'
-    );
-  }
-  db=window.supabase.createClient(
-    SUPABASE_URL,key
+  ['setup','login','app'].forEach(x=>
+    $(x).classList.toggle('hidden',x!==id)
   );
 }
 
-function getKey(){
-  if(SUPABASE_KEY.startsWith('sb_publishable_')){
-    return SUPABASE_KEY;
-  }
-  return localStorage.getItem('kt_public_key');
-}
-
-async function start(){
-  const key=getKey();
-
-  if(!key){
-    show('setup');
-    return;
-  }
-
-  try{
-    connect(key);
-    const result=await db.auth.getUser();
-
-    if(result.data.user){
-      user=result.data.user;
-      await loadApp();
-    }else{
-      show('login');
-    }
-  }catch(err){
-    show('setup');
-    $('setupMessage').textContent=err.message;
-  }
-}
-
-$('saveKey').onclick=async()=>{
-  const key=$('setupKey').value.trim();
-
-  if(!key.startsWith('sb_publishable_')){
-    $('setupMessage').textContent=
-      'Vul een geldige Publishable key in.';
-    return;
-  }
-
-  localStorage.setItem('kt_public_key',key);
-  location.reload();
-};
-
-$('loginForm').onsubmit=async event=>{
-  event.preventDefault();
-
-  $('loginMessage').textContent='Bezig met inloggen...';
-  $('loginButton').disabled=true;
-
-  const email=$('email').value.trim();
-  const password=$('password').value;
-
-  try{
-    const {data,error}=
-      await db.auth.signInWithPassword({
-        email,password
-      });
-
-    if(error)throw error;
-
-    user=data.user;
-    $('password').value='';
-    await loadApp();
-  }catch(err){
-    $('loginMessage').textContent=
-      'Inloggen mislukt: '+err.message;
-  }finally{
-    $('loginButton').disabled=false;
-  }
-};
-
-async function loadApp(){
-  const {data,error}=await db
-    .from('medewerkers')
-    .select('id,naam,rol')
-    .eq('id',user.id)
-    .single();
-
-  if(error || !data){
-    show('login');
-    $('loginMessage').textContent=
-      'Dit account heeft nog geen medewerkersprofiel.';
-    await db.auth.signOut();
-    return;
-  }
-
-  profile=data;
-  $('name').textContent=profile.naam;
-  $('profileName').textContent=profile.naam;
-  $('profileRole').textContent=profile.rol;
-  $('profileEmail').textContent=user.email;
-
-  show('app');
-  await loadShifts();
-  renderTasks();
-  showPage('home');
-}
-
-async function loadShifts(){
-  const {data,error}=await db
-    .from('diensten')
-    .select('id,medewerker_id,datum,begintijd,status')
-    .order('datum',{ascending:true});
-
-  if(error){
-    $('myShifts').textContent=
-      'Rooster laden mislukt: '+error.message;
-    return;
-  }
-
-  shifts=data||[];
-  renderRoster();
-}
-
-function formatDate(date){
+function dateLabel(date){
   return new Date(date+'T12:00:00')
     .toLocaleDateString('nl-NL',{
       weekday:'long',
@@ -455,212 +458,352 @@ function formatDate(date){
     });
 }
 
-function timeText(s){
-  if(s.status==='standby')return 'Stand-by';
-  if(s.status==='vrij')return 'Vrij';
-  return s.begintijd
-    ?s.begintijd.slice(0,5)
-    :'Tijd onbekend';
+function displayTime(r){
+  if(r.status==='standby') return 'Stand-by';
+  if(r.status==='vrij') return 'Vrij';
+  return (r.begintijd||'Tijd onbekend').replaceAll('.',':');
 }
 
-function shiftRow(s){
-  return '<div class="shift">'+
-    '<b>'+escapeHtml(formatDate(s.datum))+'</b>'+
-    '<span>'+escapeHtml(timeText(s))+'</span>'+
-    '</div>';
+function line(r,showName=true){
+  return '<div class="shift row"><div>'+
+    (showName?'<b>'+safe(r.medewerker)+'</b><br>':'')+
+    '<span class="muted" style="font-size:13px">'+
+    safe(dateLabel(r.datum))+'</span></div>'+
+    '<span class="chip '+
+    (r.status==='standby'?'goldchip':'')+'">'+
+    safe(displayTime(r))+'</span></div>';
+}
+
+function dayLine(r){
+  return '<div class="shift row"><b>'+
+    safe(r.medewerker)+'</b>'+
+    '<span class="chip '+
+    (r.status==='standby'?'goldchip':'')+'">'+
+    safe(displayTime(r))+'</span></div>';
+}
+
+function active(r){
+  return r.status!=='vrij';
+}
+
+function myRows(){
+  return roster.filter(r=>
+    r.medewerker.toLowerCase()===
+    profile.naam.toLowerCase()&&active(r)
+  );
+}
+
+async function boot(){
+  const key=localStorage.getItem('kt_public_key');
+
+  if(!key){
+    show('setup');
+    return;
+  }
+
+  try{
+    db=window.supabase.createClient(URL,key);
+    const {data}=await db.auth.getUser();
+
+    if(data.user){
+      user=data.user;
+      await load();
+    }else{
+      show('login');
+    }
+  }catch(e){
+    show('setup');
+    $('setupMsg').textContent=e.message;
+  }
+}
+
+$('saveKey').onclick=()=>{
+  const k=$('key').value.trim();
+
+  if(!k.startsWith('sb_publishable_')){
+    $('setupMsg').textContent=
+      'Gebruik alleen je Publishable key.';
+    return;
+  }
+
+  localStorage.setItem('kt_public_key',k);
+  location.reload();
+};
+
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  $('loginMsg').textContent='Bezig met inloggen...';
+
+  const {data,error}=await db.auth.signInWithPassword({
+    email:$('email').value.trim(),
+    password:$('password').value
+  });
+
+  if(error){
+    $('loginMsg').textContent=error.message;
+    return;
+  }
+
+  user=data.user;
+  $('password').value='';
+  await load();
+};
+
+async function load(){
+  const {data:p,error:pe}=await db
+    .from('medewerkers')
+    .select('naam,rol')
+    .eq('id',user.id)
+    .single();
+
+  if(pe||!p){
+    await db.auth.signOut();
+    show('login');
+    $('loginMsg').textContent=
+      'Geen medewerkersprofiel gevonden.';
+    return;
+  }
+
+  profile=p;
+
+  const {data,error}=await db
+    .from('teamrooster')
+    .select('medewerker,datum,begintijd,status,opmerking')
+    .gte('datum','2026-11-01')
+    .lte('datum','2026-11-30')
+    .order('datum',{ascending:true});
+
+  if(error){
+    show('login');
+    $('loginMsg').textContent=
+      'Teamrooster laden mislukt: '+error.message;
+    return;
+  }
+
+  roster=data||[];
+
+  $('hello').textContent=profile.naam;
+  $('profileName').textContent=profile.naam;
+  $('profileRole').textContent=
+    profile.rol==='beheerder'?'Beheerder':'Medewerker';
+  $('profileEmail').textContent=user.email;
+
+  show('app');
+  render();
+  go('home');
+}
+
+function render(){
+  const mine=myRows().sort((a,b)=>
+    a.datum.localeCompare(b.datum)
+  );
+
+  const today=new Date().toLocaleDateString('sv-SE');
+  const next=mine.find(r=>r.datum>=today);
+
+  $('nextDate').textContent=next?
+    dateLabel(next.datum):'Geen dienst gepland';
+  $('nextTime').textContent=next?
+    displayTime(next):'';
+
+  $('todayTitle').textContent=dateLabel(today);
+
+  const todayRows=roster.filter(r=>
+    r.datum===today&&active(r)
+  );
+
+  $('todayShifts').innerHTML=todayRows.length?
+    todayRows.map(dayLine).join(''):
+    '<p class="muted">Geen diensten gevonden.</p>';
+
+  $('swapShifts').innerHTML=mine.length?
+    mine.map(r=>line(r,false)).join(''):
+    '<p class="muted">Geen diensten.</p>';
+
+  renderRoster();
+  renderTasks();
+}
+
+function setRosterMode(m){
+  mode=m;
+
+  $('personalTab').className=
+    m==='mine'?'primary':'secondary';
+
+  $('teamTab').className=
+    m==='team'?'primary':'secondary';
+
+  renderRoster();
 }
 
 function renderRoster(){
-  const mine=shifts.filter(s=>
-    s.medewerker_id===user.id &&
-    s.status!=='vrij'
+  const mine=mode==='mine';
+
+  const entries=roster.filter(r=>
+    active(r)&&(!mine||
+      r.medewerker.toLowerCase()===
+      profile.naam.toLowerCase())
   );
 
-  $('myShifts').innerHTML=mine.length
-    ?mine.map(shiftRow).join('')
-    :'<p>Geen diensten gevonden.</p>';
+  $('listTitle').textContent=
+    mine?'Mijn diensten':'Alle teamdiensten';
 
-  $('upcoming').innerHTML=mine.length
-    ?mine.slice(0,3).map(shiftRow).join('')
-    :'<p>Geen diensten gevonden.</p>';
+  $('shiftList').innerHTML=entries.length?
+    entries.map(r=>line(r,!mine)).join(''):
+    '<p class="muted">Geen diensten gevonden.</p>';
 
-  renderCalendar();
-}
-
-function renderCalendar(){
-  const cal=$('calendar');
-
-  cal.innerHTML=
-    ['Zo','Ma','Di','Wo','Do','Vr','Za']
+  let html=['Zo','Ma','Di','Wo','Do','Vr','Za']
     .map(d=>'<div class="weekday">'+d+'</div>')
     .join('');
 
   for(let d=1;d<=35;d++){
     if(d>30){
-      cal.innerHTML+='<div></div>';
+      html+='<div></div>';
       continue;
     }
 
-    const date='2026-11-'+String(d).padStart(2,'0');
-    const has=shifts.some(s=>
-      s.datum===date && s.status!=='vrij'
-    );
+    const date='2026-11-'+
+      String(d).padStart(2,'0');
 
-    cal.innerHTML+=
-      '<button class="day '+
-      (has?'hasShift ':'')+
-      (d===selectedDay?'selected':'')+
-      '" data-day="'+d+'">'+d+'</button>';
+    const count=entries.filter(r=>
+      r.datum===date
+    ).length;
+
+    html+='<button class="day '+
+      (count?'mine ':'')+
+      (d===selected?'selected':'')+
+      '" data-day="'+d+'">'+d+
+      (count?'<small>• '+count+'</small>':'')+
+      '</button>';
   }
 
-  cal.querySelectorAll('[data-day]').forEach(b=>{
-    b.onclick=()=>{
-      selectedDay=Number(b.dataset.day);
-      renderCalendar();
-    };
-  });
+  $('calendar').innerHTML=html;
+
+  document.querySelectorAll('[data-day]')
+    .forEach(b=>{
+      b.onclick=()=>{
+        selected=Number(b.dataset.day);
+        renderRoster();
+      };
+    });
 
   const date='2026-11-'+
-    String(selectedDay).padStart(2,'0');
+    String(selected).padStart(2,'0');
 
-  $('selectedTitle').textContent=formatDate(date);
+  $('dayTitle').textContent=dateLabel(date);
 
-  const daily=shifts.filter(s=>
-    s.datum===date && s.status!=='vrij'
+  const dayEntries=entries.filter(r=>
+    r.datum===date
   );
 
-  $('dayShifts').innerHTML=daily.length
-    ?daily.map(s=>{
-      const naam=s.medewerker_id===user.id
-        ?profile.naam
-        :'Collega';
-      return '<div class="shift"><b>'+
-        escapeHtml(naam)+'</b><span>'+
-        escapeHtml(timeText(s))+
-        '</span></div>';
-    }).join('')
-    :'<p>Geen diensten ingevuld.</p>';
+  $('dayEntries').innerHTML=dayEntries.length?
+    dayEntries.map(dayLine).join(''):
+    '<p class="muted">Geen diensten op deze dag.</p>';
 }
 
-$('mineTab').onclick=()=>{
-  $('mineView').classList.remove('hidden');
-  $('monthView').classList.add('hidden');
-  $('mineTab').classList.remove('secondary');
-  $('monthTab').classList.add('secondary');
-};
-
-$('monthTab').onclick=()=>{
-  $('mineView').classList.add('hidden');
-  $('monthView').classList.remove('hidden');
-  $('monthTab').classList.remove('secondary');
-  $('mineTab').classList.add('secondary');
-};
-
-function showPage(page){
-  ['home','roster','tasks','points','profile']
-    .forEach(id=>{
-      $(id).classList.toggle('hidden',id!==page);
-    });
+function go(page){
+  ['home','roster','swap','tasks','profile']
+    .forEach(x=>
+      $(x).classList.toggle('hidden',x!==page)
+    );
 
   document.querySelectorAll('[data-page]')
-    .forEach(b=>{
+    .forEach(b=>
       b.classList.toggle(
         'active',b.dataset.page===page
-      );
-    });
+      )
+    );
 }
 
 document.querySelectorAll('[data-page]')
-  .forEach(b=>{
-    b.onclick=()=>showPage(b.dataset.page);
-  });
+  .forEach(b=>b.onclick=()=>go(b.dataset.page));
 
-function taskKey(){
-  return 'kt_tasks_'+user.id;
+function taskStorage(){
+  return 'kt2_tasks_'+user.id;
 }
 
-function doneKey(){
-  return 'kt_done_'+user.id;
+function doneStorage(){
+  return 'kt2_done_'+user.id;
 }
 
-function readLocal(key,fallback){
+function read(k,fallback){
   try{
-    return JSON.parse(localStorage.getItem(key))
-      ??fallback;
+    return JSON.parse(localStorage.getItem(k))??fallback;
   }catch{
     return fallback;
   }
 }
 
+function defaultTasks(){
+  return [
+    {id:'1',name:'Glazen opruimen'},
+    {id:'2',name:'Tafels schoonmaken'},
+    {id:'3',name:'Koelingen controleren'},
+    {id:'4',name:'Vloer vegen'}
+  ];
+}
+
 function renderTasks(){
-  const tasks=readLocal(taskKey(),[
-    {id:'glazen',title:'Glazen opruimen'},
-    {id:'tafels',title:'Tafels schoonmaken'},
-    {id:'koeling',title:'Koelingen controleren'},
-    {id:'vloer',title:'Vloer vegen'}
-  ]);
+  const tasks=read(taskStorage(),defaultTasks());
+  const done=read(doneStorage(),{});
 
-  const done=readLocal(doneKey(),{});
-
-  $('taskList').innerHTML=tasks.map(t=>
+  $('tasksList').innerHTML=tasks.map(t=>
     '<label class="task">'+
     '<input type="checkbox" data-task="'+
-    escapeHtml(t.id)+'" '+
+    safe(t.id)+'" '+
     (done[t.id]?'checked':'')+'>'+
-    '<span>'+escapeHtml(t.title)+'</span>'+
+    '<span>'+safe(t.name)+'</span>'+
     '</label>'
   ).join('');
 
-  $('taskList').querySelectorAll('[data-task]')
-    .forEach(c=>{
-      c.onchange=()=>{
-        done[c.dataset.task]=c.checked;
-        localStorage.setItem(
-          doneKey(),JSON.stringify(done)
-        );
-        renderPoints();
-      };
+  document.querySelectorAll('[data-task]')
+    .forEach(c=>c.onchange=()=>{
+      done[c.dataset.task]=c.checked;
+      localStorage.setItem(
+        doneStorage(),JSON.stringify(done)
+      );
+      renderPoints();
     });
 
   renderPoints();
 }
 
-$('addTask').onclick=()=>{
-  const title=$('newTask').value.trim();
-  if(!title)return;
+function renderPoints(){
+  $('points').textContent=Object.values(
+    read(doneStorage(),{})
+  ).filter(Boolean).length*10;
+}
 
-  const tasks=readLocal(taskKey(),[]);
+$('addTask').onclick=()=>{
+  const name=$('taskInput').value.trim();
+  if(!name)return;
+
+  const tasks=read(
+    taskStorage(),defaultTasks()
+  );
+
   tasks.push({
     id:String(Date.now()),
-    title
+    name
   });
 
   localStorage.setItem(
-    taskKey(),JSON.stringify(tasks)
+    taskStorage(),JSON.stringify(tasks)
   );
 
-  $('newTask').value='';
+  $('taskInput').value='';
   renderTasks();
 };
-
-function renderPoints(){
-  const done=readLocal(doneKey(),{});
-  const points=Object.values(done)
-    .filter(Boolean).length*10;
-
-  $('homePoints').textContent=points;
-  $('pointsTotal').textContent=points;
-}
 
 $('logout').onclick=async()=>{
   await db.auth.signOut();
   user=null;
   profile=null;
-  shifts=[];
+  roster=[];
   show('login');
 };
 
-start();
+boot();
 </script>
 </body>
 </html>
