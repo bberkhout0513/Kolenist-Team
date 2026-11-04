@@ -3,16 +3,14 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#105e50">
 <title>KOLENIST TEAM</title>
-
 <style>
 :root {
   --green:#105e50;
   --dark:#173b34;
   --bg:#f6f5f1;
-  --white:#ffffff;
   --muted:#69736f;
   --border:#e2e7e2;
 }
@@ -57,7 +55,6 @@ header {
   height:72px;
   object-fit:contain;
   border-radius:9px;
-  flex-shrink:0;
 }
 h2 {font-size:24px;margin:18px 0}
 h3 {font-size:17px;margin:4px 0 12px}
@@ -217,6 +214,8 @@ label.field {font-size:13px;font-weight:650}
   margin:0;
 }
 .task-name {flex:1;overflow-wrap:anywhere}
+.done-task {background:#e3efe8}
+.done-task .task-name {color:#647b70}
 .dish {
   padding:17px 0;
   border-bottom:1px solid var(--border);
@@ -239,6 +238,24 @@ label.field {font-size:13px;font-weight:650}
   overflow-wrap:anywhere;
 }
 .hero .notice {color:#e4eee9}
+.progress {
+  height:9px;
+  border-radius:20px;
+  background:#e8efeb;
+  overflow:hidden;
+}
+.progress>div {
+  height:100%;
+  background:var(--green);
+}
+details>summary {
+  cursor:pointer;
+  font-weight:750;
+  font-size:17px;
+  padding:8px 0;
+}
+details[open]>summary {margin-bottom:10px}
+.status {font-size:12px;color:var(--muted)}
 nav {
   position:fixed;
   bottom:0;
@@ -278,7 +295,6 @@ body.is-admin .admin-only {display:block}
 .inline-actions button {font-size:12px}
 </style>
 </head>
-
 <body>
 <main>
 
@@ -288,10 +304,9 @@ body.is-admin .admin-only {display:block}
     <div class="brand-title">TEAM</div>
     <div class="brand-sub">DE MEDEWERKERSAPP</div>
   </div>
-  <img
-    class="header-logo"
-    src="IMG_1291.jpeg"
-    alt="Kolenist Bar & Grill-logo">
+  <img class="header-logo"
+       src="IMG_1291.jpeg"
+       alt="Kolenist Bar & Grill-logo">
 </header>
 
 <section id="setup" class="card hidden">
@@ -308,9 +323,9 @@ body.is-admin .admin-only {display:block}
   <h2>Inloggen</h2>
   <form id="loginForm">
     <input id="email" type="email"
-      placeholder="E-mailadres" required>
+           placeholder="E-mailadres" required>
     <input id="password" type="password"
-      placeholder="Wachtwoord" required>
+           placeholder="Wachtwoord" required>
     <button class="primary" type="submit">Inloggen</button>
   </form>
   <p id="loginMsg" class="notice"></p>
@@ -321,7 +336,6 @@ body.is-admin .admin-only {display:block}
 
 <div id="app" class="hidden">
 
-<!-- HOME -->
 <section id="home">
   <div class="eyebrow">MIJN DASHBOARD</div>
   <h2>Hoi, <span id="hello"></span>!</h2>
@@ -354,10 +368,20 @@ body.is-admin .admin-only {display:block}
       <p class="muted" style="font-size:12px">Taken en punten</p>
     </button>
 
+    <button class="tile" onclick="go('closing')">
+      <span class="symbol">☑</span>
+      <b>Afsluitlijst</b>
+      <p class="muted" style="font-size:12px">
+        Samen afsluiten, samen punten
+      </p>
+    </button>
+
     <button class="tile" onclick="go('menu')">
       <span class="symbol">♨</span>
       <b>Buiten de kaart</b>
-      <p class="muted" style="font-size:12px">Specials en gerechten</p>
+      <p class="muted" style="font-size:12px">
+        Specials en gerechten
+      </p>
     </button>
   </div>
 
@@ -369,33 +393,55 @@ body.is-admin .admin-only {display:block}
 
   <div class="card">
     <div class="eyebrow">FOCUS VAN DE WEEK</div>
-    <h3>Gastvrijheid & een nette werkplek</h3>
-    <p class="muted">
+    <h3 id="focusTitle">Gastvrijheid & een nette werkplek</h3>
+    <p class="muted" id="focusText">
       Samen zorgen we voor een fijne ervaring voor iedere gast.
     </p>
+
+    <div class="admin-only">
+      <button class="secondary" id="editFocus" type="button">
+        Focus aanpassen
+      </button>
+
+      <form id="focusForm" class="hidden">
+        <label class="field" for="focusName">Titel</label>
+        <input id="focusName" maxlength="120" required>
+
+        <label class="field" for="focusDescription">
+          Beschrijving
+        </label>
+        <textarea id="focusDescription" maxlength="1000"></textarea>
+
+        <button class="primary" type="submit">
+          Opslaan voor iedereen
+        </button>
+      </form>
+      <p class="notice" id="focusMsg"></p>
+    </div>
   </div>
 </section>
 
-<!-- ROOSTER -->
 <section id="roster" class="hidden">
   <div class="eyebrow">PLANNING</div>
   <h2>Rooster</h2>
 
   <div class="tabs">
     <button id="personalTab" class="primary"
-      onclick="setRosterMode('mine')">
+            onclick="setRosterMode('mine')">
       Mijn diensten
     </button>
     <button id="teamTab" class="secondary"
-      onclick="setRosterMode('team')">
+            onclick="setRosterMode('team')">
       Teamrooster
     </button>
   </div>
 
   <div class="card">
     <div class="row">
-      <h3>November 2026</h3>
-      <span class="muted" style="font-size:12px">1 t/m 30 nov.</span>
+      <h3 id="rosterMonth">November 2026</h3>
+      <span class="muted" style="font-size:12px">
+        Maandoverzicht
+      </span>
     </div>
     <div id="calendar" class="calendar"></div>
   </div>
@@ -411,7 +457,6 @@ body.is-admin .admin-only {display:block}
   </div>
 </section>
 
-<!-- RUILEN -->
 <section id="swap" class="hidden">
   <div class="eyebrow">SAMEN PLANNEN</div>
   <h2>Diensten ruilen</h2>
@@ -442,7 +487,6 @@ body.is-admin .admin-only {display:block}
   </div>
 </section>
 
-<!-- SCHOONMAAKTAKEN -->
 <section id="tasks" class="hidden">
   <div class="eyebrow">TEAMWORK</div>
   <h2>Schoonmaaktaken</h2>
@@ -455,11 +499,9 @@ body.is-admin .admin-only {display:block}
   <div class="card admin-only">
     <h3>Nieuwe schoonmaaktaak</h3>
     <form id="taskForm">
-      <input
-        id="taskInput"
-        placeholder="Bijvoorbeeld: koeling schoonmaken"
-        maxlength="150"
-        required>
+      <input id="taskInput"
+             placeholder="Bijvoorbeeld: koeling schoonmaken"
+             maxlength="150" required>
       <button class="primary" type="submit">
         Taak toevoegen
       </button>
@@ -468,7 +510,43 @@ body.is-admin .admin-only {display:block}
   </div>
 </section>
 
-<!-- ETEN BUITEN DE KAART -->
+<section id="closing" class="hidden">
+  <div class="eyebrow">SAMEN AFSLUITEN</div>
+  <h2>Afsluitlijst</h2>
+  <p class="muted">
+    Eén collega vinkt een taak af.
+    Iedereen met een actieve dienst op deze werkdag
+    krijgt +1 punt per afgeronde taak.
+  </p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <div class="eyebrow">WERKDAG</div>
+        <h3 id="closingDate">—</h3>
+      </div>
+      <button class="secondary" id="refreshClosing">
+        Verversen
+      </button>
+    </div>
+
+    <p id="closingPermission" class="notice"></p>
+
+    <div class="row">
+      <b id="closingProgress">0 van 64 taken</b>
+      <span id="closingPercent" class="chip">0%</span>
+    </div>
+
+    <div class="progress" style="margin-top:12px">
+      <div id="closingBar" style="width:0%"></div>
+    </div>
+
+    <p id="closingMsg" class="notice"></p>
+  </div>
+
+  <div id="closingList"></div>
+</section>
+
 <section id="menu" class="hidden">
   <div class="eyebrow">KOLENIST BAR & GRILL</div>
   <h2>Eten buiten de kaart</h2>
@@ -487,41 +565,31 @@ body.is-admin .admin-only {display:block}
       <label class="field" for="dishName">
         Naam gerecht
       </label>
-      <input
-        id="dishName"
-        maxlength="150"
-        placeholder="Bijvoorbeeld: Picanha Black Angus"
-        required>
+      <input id="dishName" maxlength="150"
+             placeholder="Bijvoorbeeld: Picanha Black Angus"
+             required>
 
       <label class="field" for="dishDescription">
         Beschrijving
       </label>
-      <textarea
-        id="dishDescription"
-        placeholder="Wat zit er bij het gerecht?"
-        required></textarea>
+      <textarea id="dishDescription"
+                placeholder="Wat zit er bij het gerecht?"
+                required></textarea>
 
       <label class="field" for="dishPrice">
         Prijs in euro's
       </label>
-      <input
-        id="dishPrice"
-        type="number"
-        min="0"
-        max="999999.99"
-        step="0.01"
-        placeholder="27,50"
-        required>
+      <input id="dishPrice" type="number"
+             min="0" max="999999.99" step="0.01"
+             placeholder="27,50" required>
 
       <button class="primary" type="submit" id="dishSubmit">
         Gerecht toevoegen
       </button>
 
-      <button
-        class="secondary hidden"
-        type="button"
-        id="cancelDish"
-        style="width:100%;margin-top:8px">
+      <button class="secondary hidden" type="button"
+              id="cancelDish"
+              style="width:100%;margin-top:8px">
         Bewerken annuleren
       </button>
     </form>
@@ -530,7 +598,6 @@ body.is-admin .admin-only {display:block}
   </div>
 </section>
 
-<!-- PROFIEL -->
 <section id="profile" class="hidden">
   <div class="eyebrow">MIJN ACCOUNT</div>
   <h2>Profiel</h2>
@@ -544,7 +611,14 @@ body.is-admin .admin-only {display:block}
   <div class="card">
     <div class="eyebrow">MIJN PUNTEN</div>
     <div class="big" id="points">0</div>
-    <p class="muted">10 punten per afgevinkte taak.</p>
+    <p class="muted">
+      Schoonmaaktaken: 10 punten per taak.
+    </p>
+    <p class="muted">
+      Afsluitlijst: 1 punt per afgeronde taak
+      voor iedereen met een actieve dienst.
+    </p>
+    <p id="pointsBreakdown" class="notice"></p>
     <p class="muted">Beloningen volgen later.</p>
   </div>
 
@@ -565,6 +639,9 @@ body.is-admin .admin-only {display:block}
   </button>
   <button data-page="tasks">
     <span class="symbol">✓</span>Taken
+  </button>
+  <button data-page="closing">
+    <span class="symbol">☑</span>Afsluiten
   </button>
   <button data-page="menu">
     <span class="symbol">♨</span>Menu
@@ -592,6 +669,13 @@ let dishes = [];
 let editingDish = null;
 let mode = 'mine';
 let selected = 6;
+let calendarMonth = '2026-11';
+
+let closingTasks = [];
+let closingDone = new Map();
+let closingDay = '';
+let closingAllowed = false;
+let closingPoints = 0;
 
 function safe(v) {
   return String(v ?? '').replace(/[&<>"']/g,c=>({
@@ -604,13 +688,41 @@ function safe(v) {
 }
 
 function admin() {
-  return profile?.rol === 'beheerder';
+  return String(profile?.rol || '')
+    .trim().toLowerCase() === 'beheerder';
 }
 
 function show(id) {
   ['setup','login','app'].forEach(x =>
     $(x).classList.toggle('hidden',x !== id)
   );
+}
+
+function localDay() {
+  return new Intl.DateTimeFormat('sv-SE',{
+    timeZone:'Europe/Amsterdam',
+    year:'numeric',
+    month:'2-digit',
+    day:'2-digit'
+  }).format(new Date());
+}
+
+function workDay() {
+  const hour = new Intl.DateTimeFormat('en-GB',{
+    timeZone:'Europe/Amsterdam',
+    hour:'2-digit',
+    hourCycle:'h23'
+  }).format(new Date());
+
+  const day = localDay();
+
+  if(Number(hour) < 5) {
+    const d = new Date(day+'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate()-1);
+    return d.toISOString().slice(0,10);
+  }
+
+  return day;
 }
 
 function dateLabel(date) {
@@ -623,14 +735,22 @@ function dateLabel(date) {
 }
 
 function displayTime(r) {
-  if(r.status === 'standby') return 'Stand-by';
+  if(['standby','stand-by'].includes(r.status))
+    return 'Stand-by';
   if(r.status === 'vrij') return 'Vrij';
+
   return (r.begintijd || 'Tijd onbekend')
     .replaceAll('.',':');
 }
 
 function active(r) {
-  return r.status !== 'vrij';
+  return String(r.status || '')
+    .toLowerCase() !== 'vrij';
+}
+
+function working(r) {
+  return !['vrij','standby','stand-by']
+    .includes(String(r.status || '').trim().toLowerCase());
 }
 
 function line(r,showName=true) {
@@ -653,8 +773,9 @@ function dayLine(r) {
 
 function myRows() {
   return roster.filter(r =>
-    String(r.medewerker || '').toLowerCase() ===
-    String(profile.naam || '').toLowerCase() && active(r)
+    String(r.medewerker || '').trim().toLowerCase() ===
+    String(profile?.naam || '').trim().toLowerCase()
+    && active(r)
   );
 }
 
@@ -759,9 +880,9 @@ async function load() {
     .from('teamrooster')
     .select('medewerker,datum,begintijd,status,opmerking')
     .gte('datum','2026-11-01')
-    .lte('datum','2026-11-30')
+    .lte('datum','2026-12-31')
     .order('datum',{ascending:true})
-    .limit(1000);
+    .limit(2000);
 
   if(error) {
     show('login');
@@ -787,7 +908,10 @@ async function load() {
 
   await Promise.all([
     loadTasks(),
-    loadDishes()
+    loadDishes(),
+    loadFocus(),
+    loadClosing(),
+    loadClosingPoints()
   ]);
 }
 
@@ -796,7 +920,7 @@ function renderHome() {
     a.datum.localeCompare(b.datum)
   );
 
-  const today = new Date().toLocaleDateString('sv-SE');
+  const today = localDay();
   const next = mine.find(r => r.datum >= today);
 
   $('nextDate').textContent = next ?
@@ -841,27 +965,41 @@ function renderRoster() {
 
   const entries = roster.filter(r =>
     active(r) && (!mine ||
-      String(r.medewerker || '').toLowerCase() ===
-      String(profile.naam || '').toLowerCase())
+      String(r.medewerker || '').trim().toLowerCase() ===
+      String(profile.naam || '').trim().toLowerCase())
   );
 
   $('shiftList').innerHTML = entries.length ?
     entries.map(r=>line(r,false)).join('') :
     '<p class="muted">Geen diensten gevonden.</p>';
 
+  const [year,month] = calendarMonth.split('-').map(Number);
+
+  $('rosterMonth').textContent =
+    new Date(year,month-1,1)
+      .toLocaleDateString('nl-NL',{
+        month:'long',
+        year:'numeric'
+      });
+
   let html = ['Zo','Ma','Di','Wo','Do','Vr','Za']
     .map(d=>'<div class="weekday">'+d+'</div>')
     .join('');
 
-  // November 2026 begint op zondag.
-  for(let d=1;d<=35;d++) {
-    if(d>30) {
-      html += '<div></div>';
-      continue;
-    }
+  const offset = new Date(year,month-1,1).getDay();
+  const days = new Date(year,month,0).getDate();
 
-    const date = '2026-11-'+String(d).padStart(2,'0');
-    const count = entries.filter(r=>r.datum===date).length;
+  for(let x=0;x<offset;x++) {
+    html += '<div></div>';
+  }
+
+  for(let d=1;d<=days;d++) {
+    const date = calendarMonth+'-'+
+      String(d).padStart(2,'0');
+
+    const count = entries.filter(r=>
+      r.datum===date
+    ).length;
 
     html += '<button class="day '+
       (count?'mine ':'')+
@@ -880,13 +1018,14 @@ function renderRoster() {
     };
   });
 
-  const date='2026-11-'+String(selected).padStart(2,'0');
+  const date = calendarMonth+'-'+
+    String(selected).padStart(2,'0');
 
-  $('dayTitle').textContent=dateLabel(date);
+  $('dayTitle').textContent = dateLabel(date);
 
-  const dayEntries=entries.filter(r=>r.datum===date);
+  const dayEntries = entries.filter(r=>r.datum===date);
 
-  $('dayEntries').innerHTML=dayEntries.length ?
+  $('dayEntries').innerHTML = dayEntries.length ?
     dayEntries.map(dayLine).join('') :
     '<p class="muted">Geen diensten op deze dag.</p>';
 }
@@ -909,8 +1048,17 @@ async function loadTasks() {
   }
 
   tasks = tResult.data || [];
-  done = new Set((dResult.data||[]).map(x=>String(x.taak_id)));
+  done = new Set(
+    (dResult.data||[]).map(x=>String(x.taak_id))
+  );
   renderTasks();
+}
+
+function updatePoints() {
+  $('points').textContent = done.size*10+closingPoints;
+  $('pointsBreakdown').textContent =
+    'Schoonmaaktaken: '+done.size*10+
+    ' punten · Afsluitlijst: '+closingPoints+' punten';
 }
 
 function renderTasks() {
@@ -940,27 +1088,22 @@ function renderTasks() {
     b.onclick=()=>deleteTask(Number(b.dataset.deleteTask));
   });
 
-  $('points').textContent=done.size*10;
+  updatePoints();
 }
 
 async function toggleTask(c) {
-  const id=Number(c.dataset.task);
-  const checked=c.checked;
-  c.disabled=true;
+  const id = Number(c.dataset.task);
+  c.disabled = true;
 
-  let result;
-
-  if(checked) {
-    result=await db.from('taak_afgerond').upsert({
+  const result = c.checked ?
+    await db.from('taak_afgerond').upsert({
       taak_id:id,
       medewerker_id:user.id
-    },{onConflict:'taak_id,medewerker_id'});
-  } else {
-    result=await db.from('taak_afgerond')
+    },{onConflict:'taak_id,medewerker_id'}) :
+    await db.from('taak_afgerond')
       .delete()
       .eq('taak_id',id)
       .eq('medewerker_id',user.id);
-  }
 
   if(result.error) {
     alert('Opslaan mislukt: '+result.error.message);
@@ -969,33 +1112,33 @@ async function toggleTask(c) {
   await loadTasks();
 }
 
-$('taskForm').onsubmit=async e=>{
+$('taskForm').onsubmit = async e => {
   e.preventDefault();
-  if(!admin())return;
+  if(!admin()) return;
 
-  const name=$('taskInput').value.trim();
-  if(!name)return;
+  const name = $('taskInput').value.trim();
+  if(!name) return;
 
-  $('taskMsg').textContent='Opslaan...';
+  $('taskMsg').textContent = 'Opslaan...';
 
-  const {error}=await db.from('schoonmaaktaken')
+  const {error} = await db.from('schoonmaaktaken')
     .insert({naam:name});
 
   if(error) {
-    $('taskMsg').textContent=error.message;
+    $('taskMsg').textContent = error.message;
     return;
   }
 
-  $('taskInput').value='';
-  $('taskMsg').textContent='Taak toegevoegd.';
+  $('taskInput').value = '';
+  $('taskMsg').textContent = 'Taak toegevoegd.';
   await loadTasks();
 };
 
 async function deleteTask(id) {
-  if(!admin())return;
-  if(!confirm('Deze taak verwijderen voor iedereen?'))return;
+  if(!admin()) return;
+  if(!confirm('Deze taak verwijderen voor iedereen?')) return;
 
-  const {error}=await db.from('schoonmaaktaken')
+  const {error} = await db.from('schoonmaaktaken')
     .delete().eq('id',id);
 
   if(error) {
@@ -1007,7 +1150,7 @@ async function deleteTask(id) {
 }
 
 async function loadDishes() {
-  const {data,error}=await db.from('buiten_de_kaart')
+  const {data,error} = await db.from('buiten_de_kaart')
     .select('id,naam,beschrijving,prijs')
     .order('id',{ascending:false});
 
@@ -1017,7 +1160,7 @@ async function loadDishes() {
     return;
   }
 
-  dishes=data||[];
+  dishes = data || [];
   renderDishes();
 }
 
@@ -1035,7 +1178,7 @@ function renderDishes() {
     return;
   }
 
-  $('dishList').innerHTML=dishes.map(d=>
+  $('dishList').innerHTML = dishes.map(d=>
     '<div class="dish">'+
     '<div class="row">'+
     '<h3>'+safe(d.naam)+'</h3>'+
@@ -1063,74 +1206,69 @@ function renderDishes() {
 }
 
 function editDish(id) {
-  if(!admin())return;
+  if(!admin()) return;
 
-  const d=dishes.find(x=>x.id===id);
-  if(!d)return;
+  const d = dishes.find(x=>x.id===id);
+  if(!d) return;
 
-  editingDish=id;
-  $('dishName').value=d.naam;
-  $('dishDescription').value=d.beschrijving;
-  $('dishPrice').value=d.prijs;
-  $('dishFormTitle').textContent='Gerecht bewerken';
-  $('dishSubmit').textContent='Wijzigingen opslaan';
+  editingDish = id;
+  $('dishName').value = d.naam;
+  $('dishDescription').value = d.beschrijving;
+  $('dishPrice').value = d.prijs;
+  $('dishFormTitle').textContent = 'Gerecht bewerken';
+  $('dishSubmit').textContent = 'Wijzigingen opslaan';
   $('cancelDish').classList.remove('hidden');
   $('dishName').focus();
 }
 
 function resetDishForm() {
-  editingDish=null;
+  editingDish = null;
   $('dishForm').reset();
-  $('dishFormTitle').textContent='Gerecht toevoegen';
-  $('dishSubmit').textContent='Gerecht toevoegen';
+  $('dishFormTitle').textContent = 'Gerecht toevoegen';
+  $('dishSubmit').textContent = 'Gerecht toevoegen';
   $('cancelDish').classList.add('hidden');
 }
 
-$('cancelDish').onclick=resetDishForm;
+$('cancelDish').onclick = resetDishForm;
 
-$('dishForm').onsubmit=async e=>{
+$('dishForm').onsubmit = async e => {
   e.preventDefault();
-  if(!admin())return;
+  if(!admin()) return;
 
-  const naam=$('dishName').value.trim();
-  const beschrijving=$('dishDescription').value.trim();
-  const prijs=Number($('dishPrice').value);
+  const naam = $('dishName').value.trim();
+  const beschrijving = $('dishDescription').value.trim();
+  const prijs = Number($('dishPrice').value);
 
   if(!naam || !beschrijving ||
      !Number.isFinite(prijs) || prijs<0) {
-    $('dishMsg').textContent='Vul alle velden correct in.';
+    $('dishMsg').textContent = 'Vul alle velden correct in.';
     return;
   }
 
-  const payload={naam,beschrijving,prijs};
+  const payload = {naam,beschrijving,prijs};
+  $('dishMsg').textContent = 'Opslaan...';
 
-  $('dishMsg').textContent='Opslaan...';
-
-  let result;
-
-  if(editingDish!==null) {
-    result=await db.from('buiten_de_kaart')
-      .update(payload).eq('id',editingDish);
-  } else {
-    result=await db.from('buiten_de_kaart')
+  const result = editingDish !== null ?
+    await db.from('buiten_de_kaart')
+      .update(payload).eq('id',editingDish) :
+    await db.from('buiten_de_kaart')
       .insert(payload);
-  }
 
   if(result.error) {
-    $('dishMsg').textContent=result.error.message;
+    $('dishMsg').textContent = result.error.message;
     return;
   }
 
   resetDishForm();
-  $('dishMsg').textContent='Gerecht opgeslagen.';
+  $('dishMsg').textContent = 'Gerecht opgeslagen.';
   await loadDishes();
 };
 
 async function deleteDish(id) {
-  if(!admin())return;
-  if(!confirm('Dit gerecht verwijderen?'))return;
+  if(!admin()) return;
+  if(!confirm('Dit gerecht verwijderen?')) return;
 
-  const {error}=await db.from('buiten_de_kaart')
+  const {error} = await db.from('buiten_de_kaart')
     .delete().eq('id',id);
 
   if(error) {
@@ -1138,33 +1276,247 @@ async function deleteDish(id) {
     return;
   }
 
-  if(editingDish===id)resetDishForm();
+  if(editingDish===id) resetDishForm();
   await loadDishes();
 }
 
-function go(page) {
-  ['home','roster','swap','tasks','menu','profile']
-    .forEach(x=>
-      $(x).classList.toggle('hidden',x!==page)
+async function loadFocus() {
+  const {data,error} = await db.from('weekfocus')
+    .select('titel,beschrijving')
+    .eq('id',1)
+    .maybeSingle();
+
+  if(error) {
+    $('focusMsg').textContent =
+      'Focus laden mislukt: '+error.message;
+    return;
+  }
+
+  if(data) {
+    $('focusTitle').textContent = data.titel;
+    $('focusText').textContent = data.beschrijving;
+  }
+}
+
+$('editFocus').onclick = () => {
+  $('focusName').value = $('focusTitle').textContent;
+  $('focusDescription').value = $('focusText').textContent;
+  $('focusForm').classList.toggle('hidden');
+};
+
+$('focusForm').onsubmit = async e => {
+  e.preventDefault();
+  if(!admin()) return;
+
+  $('focusMsg').textContent = 'Opslaan...';
+
+  const {error} = await db.rpc(
+    'kolenist_bewaar_weekfocus',{
+      p_titel:$('focusName').value.trim(),
+      p_beschrijving:$('focusDescription').value.trim()
+    }
+  );
+
+  if(error) {
+    $('focusMsg').textContent = error.message;
+    return;
+  }
+
+  $('focusForm').classList.add('hidden');
+  $('focusMsg').textContent =
+    'Focus opgeslagen voor iedereen.';
+  await loadFocus();
+};
+
+async function loadClosing() {
+  closingDay = workDay();
+  $('closingDate').textContent = dateLabel(closingDay);
+
+  closingAllowed = roster.some(r =>
+    r.datum===closingDay &&
+    working(r) &&
+    String(r.medewerker||'').trim().toLowerCase() ===
+    String(profile?.naam||'').trim().toLowerCase()
+  );
+
+  $('closingPermission').textContent = closingAllowed ?
+    'Je werkt vandaag: je mag taken afvinken.' :
+    'Je hebt geen actieve dienst op deze werkdag. Je kunt de lijst alleen bekijken.';
+
+  const [t,r] = await Promise.all([
+    db.from('afsluit_taken')
+      .select('id,categorie,volgorde,naam')
+      .order('id'),
+    db.from('afsluit_registraties')
+      .select('taak_id,afgevinkt_op,afgevinkt_door')
+      .eq('datum',closingDay)
+  ]);
+
+  if(t.error || r.error) {
+    $('closingMsg').textContent =
+      'Afsluitlijst laden mislukt: '+
+      (t.error?.message || r.error?.message);
+    return;
+  }
+
+  $('closingMsg').textContent = '';
+  closingTasks = t.data || [];
+  closingDone = new Map(
+    (r.data||[]).map(x=>[x.taak_id,x])
+  );
+
+  renderClosing();
+}
+
+function renderClosing() {
+  const total = closingTasks.length;
+  const completed = closingDone.size;
+  const pct = total ?
+    Math.round(100*completed/total) : 0;
+
+  $('closingProgress').textContent =
+    completed+' van '+total+' taken';
+  $('closingPercent').textContent = pct+'%';
+  $('closingBar').style.width = pct+'%';
+
+  const cats = [...new Set(
+    closingTasks.map(t=>t.categorie)
+  )];
+
+  $('closingList').innerHTML = cats.map(cat=>{
+    const items = closingTasks.filter(t=>
+      t.categorie===cat
     );
 
-  document.querySelectorAll('[data-page]').forEach(b=>
-    b.classList.toggle('active',b.dataset.page===page)
+    const count = items.filter(t=>
+      closingDone.has(t.id)
+    ).length;
+
+    return '<details class="card" open>'+
+      '<summary>'+safe(cat)+
+      ' <span class="chip">'+count+'/'+items.length+
+      '</span></summary>'+
+      items.map(t=>{
+        const d = closingDone.get(t.id);
+
+        return '<label class="task '+
+          (d?'done-task':'')+'">'+
+          '<input type="checkbox" data-close="'+t.id+'" '+
+          (d?'checked ':'')+
+          (!closingAllowed||d?'disabled ':'')+'>'+
+          '<span class="task-name">'+safe(t.naam)+
+          (d?
+            '<span class="status" style="display:block">'+
+            'Afgevinkt om '+
+            safe(new Date(d.afgevinkt_op)
+              .toLocaleTimeString('nl-NL',{
+                hour:'2-digit',
+                minute:'2-digit'
+              }))+
+            '</span>' : '')+
+          '</span></label>';
+      }).join('')+
+      '</details>';
+  }).join('');
+
+  document.querySelectorAll('[data-close]').forEach(c=>{
+    c.onchange = ()=>checkClosing(c);
+  });
+}
+
+async function checkClosing(c) {
+  if(!closingAllowed || !c.checked) return;
+
+  c.disabled = true;
+  $('closingMsg').textContent = 'Taak opslaan...';
+
+  const {data,error} = await db.rpc(
+    'kolenist_vink_afsluittaak',{
+      p_taak_id:Number(c.dataset.close)
+    }
   );
+
+  if(error) {
+    $('closingMsg').textContent =
+      'Opslaan mislukt: '+error.message;
+  } else {
+    $('closingMsg').textContent = data ?
+      'Taak afgerond. Iedereen met een actieve dienst heeft +1 punt gekregen.' :
+      'Deze taak was al door een collega afgevinkt.';
+  }
+
+  await Promise.all([
+    loadClosing(),
+    loadClosingPoints()
+  ]);
+}
+
+async function loadClosingPoints() {
+  const {data,error} = await db
+    .from('afsluit_punten')
+    .select('punten')
+    .eq('medewerker_id',user.id)
+    .limit(10000);
+
+  if(error) {
+    $('pointsBreakdown').textContent =
+      'Afsluitpunten laden mislukt: '+error.message;
+    return;
+  }
+
+  closingPoints = (data||[]).reduce(
+    (sum,r)=>sum+Number(r.punten||0),0
+  );
+
+  updatePoints();
+}
+
+$('refreshClosing').onclick = async () => {
+  await Promise.all([
+    loadClosing(),
+    loadClosingPoints()
+  ]);
+};
+
+function go(page) {
+  [
+    'home','roster','swap','tasks',
+    'closing','menu','profile'
+  ].forEach(x=>
+    $(x).classList.toggle('hidden',x!==page)
+  );
+
+  document.querySelectorAll('[data-page]').forEach(b=>
+    b.classList.toggle(
+      'active',b.dataset.page===page
+    )
+  );
+
+  if(page==='closing' && db && user)
+    loadClosing();
+
+  if(page==='profile' && db && user)
+    loadClosingPoints();
+
+  if(page==='home' && db && user)
+    loadFocus();
 }
 
 document.querySelectorAll('[data-page]').forEach(b=>{
-  b.onclick=()=>go(b.dataset.page);
+  b.onclick = ()=>go(b.dataset.page);
 });
 
-$('logout').onclick=async()=>{
+$('logout').onclick = async () => {
   await db.auth.signOut();
-  user=null;
-  profile=null;
-  roster=[];
-  tasks=[];
-  dishes=[];
-  done=new Set();
+
+  user = null;
+  profile = null;
+  roster = [];
+  tasks = [];
+  dishes = [];
+  done = new Set();
+  closingPoints = 0;
+
   document.body.classList.remove('is-admin');
   show('login');
 };
