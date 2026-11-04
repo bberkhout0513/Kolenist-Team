@@ -1,126 +1,380 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101010">
-<title>Kolenist Team</title>
+<meta name="theme-color" content="#111111">
+<title>KOLENIST TEAM</title>
 <style>
+:root{font-family:system-ui,-apple-system,Arial,sans-serif;color:#f8f8f8;background:#101010}
 *{box-sizing:border-box}
-body{margin:0;background:#101010;color:white;font-family:Arial,sans-serif;padding-bottom:85px}
-header{padding:25px 20px;border-bottom:1px solid #333}
-.logo{font:bold italic 32px Georgia,serif}
-.logo span{font-family:Arial;font-style:normal}
-small,.muted{color:#aaa}
-main{padding:18px;max-width:600px;margin:auto}
-h1{font-size:25px}h2{font-size:19px}
-.card{background:#202020;border:1px solid #363636;border-radius:15px;padding:17px;margin:13px 0}
-button,select,input,textarea{font:inherit}
-button{background:white;color:black;border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:pointer}
-input,select,textarea{width:100%;padding:12px;margin:7px 0;background:#292929;border:1px solid #555;border-radius:9px;color:white}
-nav{position:fixed;bottom:0;left:0;right:0;background:#191919;border-top:1px solid #444;display:flex;justify-content:space-around;padding:10px 3px}
-nav button{background:none;color:#aaa;font-size:12px;padding:7px 3px}
-nav button.active{color:white}
-.page{display:none}.page.active{display:block}
-.task{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #444}
-.task input{width:22px;height:22px}
-.tag{display:inline-block;border:1px solid #777;border-radius:20px;padding:5px 10px;font-size:12px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+body{margin:0 auto;padding:18px 16px 90px;max-width:680px}
+h1{font-size:24px;letter-spacing:2px;margin:8px 0}
+h2{font-size:20px;margin:4px 0 12px}
+p,.muted{color:#aaa}
+header{padding-bottom:14px;border-bottom:1px solid #333;margin-bottom:18px}
+.small{font-size:13px}
+.card{background:#202020;border:1px solid #343434;border-radius:16px;padding:16px;margin:12px 0}
+.stack{display:grid;gap:10px}
+button,input,select{font:inherit}
+button{border:0;border-radius:10px;background:#393939;color:white;padding:11px 14px;cursor:pointer}
+button.active,.primary{background:white;color:#111;font-weight:700}
+select,input{width:100%;background:#292929;color:white;border:1px solid #555;border-radius:10px;padding:12px}
+.tabs{display:flex;gap:8px}
+.tabs button{flex:1;padding:11px 6px;font-size:14px}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday{text-align:center;color:#aaa;font-size:12px;padding:6px 0}
+.date{min-height:53px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:5px;border:1px solid #343434;background:#252525}
+.date.selected{border:2px solid white;background:#444}
+.dot{width:6px;height:6px;border-radius:50%;background:#fff}
+.date.empty{background:transparent;border:0}
+.shift{padding:12px;border-radius:10px;background:#2b2b2b;display:flex;justify-content:space-between;gap:12px}
+.standby{color:#f2c56d}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#151515;border-top:1px solid #333;display:flex;justify-content:center;gap:3px;padding:10px 5px max(12px,env(safe-area-inset-bottom))}
+.nav button{background:transparent;font-size:12px;padding:9px 10px}
+.nav button.active{background:white;color:black}
+section{display:none}
+section.active{display:block}
+label{display:block;margin:8px 0}
+.task{display:flex;align-items:center;gap:10px;background:#292929;padding:12px;border-radius:10px}
+.task input{width:auto;transform:scale(1.2)}
+.task.done span{text-decoration:line-through;color:#aaa}
+.hint{font-size:12px;color:#999;line-height:1.5}
 </style>
 </head>
 <body>
+
 <header>
-<div class="logo">Kolen<span>ist</span></div>
-<small>BAR & GRILL · TEAM APP</small>
+<h1>KOLENIST TEAM</h1>
+<div class="muted small">Bediening · Kolenist Bar & Grill</div>
 </header>
-<main>
-<section id="home" class="page active">
-<h1>Welkom bij Kolenist 👋</h1>
-<p class="muted">Alles voor jouw werk op één plek.</p>
-<div class="card"><span class="tag">VOLGENDE DIENST</span>
-<h2>Vrijdag · 17:00–23:00</h2>
-<p>Bediening · Voorbeeldrooster</p>
-<button onclick="show('rooster')">Bekijk rooster</button></div>
-<div class="card"><h2>🎯 Focus van de week</h2>
-<p id="homeFocus"></p></div>
-<div class="card"><h2>🧹 Schoonmaaktaken</h2>
-<p id="taskCount"></p>
-<button onclick="show('taken')">Bekijk taken</button></div>
-<div class="card"><h2>⭐ Mijn punten</h2>
-<h2 id="homePoints"></h2></div>
+
+<div class="card">
+<label for="person">Wie bekijkt de app?</label>
+<select id="person"></select>
+<p class="hint">Testversie: naam kiezen is nog geen beveiligde persoonlijke login.</p>
+</div>
+
+<section id="home" class="active">
+<h2>Welkom <span id="welcome"></span>!</h2>
+<div class="card">
+<b>Focus van deze week</b>
+<p id="focusText">Gastvrijheid en een nette werkplek.</p>
+<input id="focusInput" placeholder="Nieuwe weekfocus">
+<button id="saveFocus" class="primary" style="margin-top:8px">Opslaan</button>
+</div>
+<div class="card">
+<b>Mijn volgende diensten</b>
+<div id="nextShifts" class="stack" style="margin-top:12px"></div>
+</div>
+<div class="card">
+<b>Mijn punten</b>
+<p><strong id="homePoints">0</strong> punten</p>
+</div>
 </section>
-<section id="rooster" class="page">
-<h1>📅 Mijn rooster</h1>
-<p class="muted">Voorbeeldrooster, nog niet gekoppeld aan collega's.</p>
-<div class="card"><h2>Vrijdag</h2><p>17:00–23:00 · Bediening</p></div>
-<div class="card"><h2>Zaterdag</h2><p>12:00–20:00 · Bar</p></div>
-<div class="card"><h2>Zondag</h2><p>Vrij</p></div>
+
+<section id="roster">
+<h2>Rooster</h2>
+<div class="tabs">
+<button class="active" data-roster="mine">Mijn diensten</button>
+<button data-roster="month">Maandkalender</button>
+</div>
+<div id="mineView">
+<div class="card">
+<h2>Mijn diensten · november 2026</h2>
+<div id="myShifts" class="stack"></div>
+</div>
+</div>
+<div id="monthView" style="display:none">
+<div class="card">
+<h2>November 2026</h2>
+<div class="calendar" id="calendar"></div>
+</div>
+<div class="card">
+<h2 id="dayTitle"></h2>
+<div id="dayShifts" class="stack"></div>
+</div>
+</div>
+<p class="hint">Begintijden volgens het aangeleverde novemberrooster. Eindtijden zijn niet opgegeven. Controleer het rooster voor gebruik.</p>
 </section>
-<section id="taken" class="page">
-<h1>🧹 Schoonmaaktaken</h1>
-<p class="muted">Vink je taken af wanneer ze klaar zijn.</p>
-<div class="card"><h2>Mijn checklist</h2><div id="taskList"></div></div>
-<div class="card"><h2>Nieuwe taak toevoegen</h2>
-<input id="newTask" placeholder="Bijv. koffiemachine reinigen">
-<select id="newArea"><option>Bar</option><option>Bediening</option><option>Keuken</option><option>Algemeen</option></select>
-<button onclick="addTask()">Taak toevoegen</button></div>
+
+<section id="tasks">
+<h2>Schoonmaaktaken</h2>
+<p>Vink taken af zodra ze klaar zijn.</p>
+<div id="taskList" class="stack"></div>
+<div class="card">
+<h3>Taak toevoegen</h3>
+<input id="newTask" placeholder="Bijv. Koelingen schoonmaken">
+<button id="addTask" class="primary" style="margin-top:10px">Toevoegen</button>
+</div>
+<p class="hint">Punten en afgevinkte taken worden in deze testversie alleen op dit toestel opgeslagen.</p>
 </section>
-<section id="punten" class="page">
-<h1>⭐ Boost Points</h1>
-<div class="card"><p>Mijn punten</p><h1 id="pointsTotal"></h1></div>
-<div class="card"><h2>Beloningen</h2>
-<p>☕ Gratis koffie – 100 punten</p>
-<p>🍽️ Gratis lunch – 500 punten</p>
-<p>🎁 Cadeaubon – 1000 punten</p>
-<p class="muted">Beloningen zijn voorbeelden.</p></div>
+
+<section id="points">
+<h2>Punten & beloningen</h2>
+<div class="card">
+<p>Mijn puntentotaal</p>
+<h1 id="pointsTotal">0</h1>
+<p class="hint">10 punten per afgevinkte taak.</p>
+</div>
+<div class="card">
+<h3>Beloningen (voorbeelden)</h3>
+<div class="shift"><span>Gratis koffie</span><b>50 punten</b></div>
+<div class="shift" style="margin-top:8px"><span>Lunch naar keuze</span><b>150 punten</b></div>
+</div>
 </section>
-<section id="profiel" class="page">
-<h1>⚙️ Instellingen</h1>
-<div class="card"><h2>Weekfocus aanpassen</h2>
-<input id="focusInput" placeholder="Focus van deze week">
-<button onclick="saveFocus()">Opslaan</button></div>
-<div class="card"><h2>Over deze app</h2>
-<p>KOLENIST TEAM · Demo 1.0</p>
-<p class="muted">Gegevens worden alleen op dit apparaat bewaard. Er zijn nog geen echte accounts.</p></div>
+
+<section id="profile">
+<h2>Profiel</h2>
+<div class="card">
+<p>Geselecteerde medewerker</p>
+<h2 id="profileName"></h2>
+<p class="hint">Echte persoonlijke accounts komen later.</p>
+</div>
 </section>
-</main>
-<nav>
-<button onclick="show('home')">⌂<br>Home</button>
-<button onclick="show('rooster')">▦<br>Rooster</button>
-<button onclick="show('taken')">☑<br>Taken</button>
-<button onclick="show('punten')">★<br>Punten</button>
-<button onclick="show('profiel')">⚙<br>Profiel</button>
+
+<nav class="nav">
+<button data-page="home" class="active">Home</button>
+<button data-page="roster">Rooster</button>
+<button data-page="tasks">Taken</button>
+<button data-page="points">Punten</button>
+<button data-page="profile">Profiel</button>
 </nav>
+
 <script>
-const key="kolenist-demo-v1";
-const defaults={focus:"Gastvrijheid: begroet iedere gast vriendelijk.",points:0,tasks:[
-{name:"Bar schoonmaken",area:"Bar",done:false},
-{name:"Tafels reinigen",area:"Bediening",done:false},
-{name:"Koelingen controleren",area:"Keuken",done:false},
-{name:"Vloer dweilen",area:"Algemeen",done:false}]};
-let data;
-try{data=JSON.parse(localStorage.getItem(key))||defaults}catch(e){data=defaults}
-function save(){localStorage.setItem(key,JSON.stringify(data));render()}
-function show(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo(0,0)}
+const people=[
+'Babs','Daphne','Dewi','Emie','Fee','Floor',
+'Giulia','Johanneke','Kim','Nikki','Ruben',
+'Shenna','Simaf','Eigenaar'
+];
+
+// November 2026: datum | naam | begintijd of SB/Vrij
+const raw=`
+2|Babs|16:00;2|Shenna|17:30;2|Emie|SB;
+3|Daphne|16:00;3|Fee|17:30;3|Kim|SB;
+4|Daphne|16:00;4|Floor|17:30;4|Simaf|SB;
+5|Daphne|16:00;5|Emie|SB;5|Floor|17:30;
+6|Daphne|16:30;6|Ruben|17:30;6|Emie|17:30;
+6|Babs|17:30;6|Floor|11:30/17:00;6|Simaf|18:00;
+7|Fee|11:30;7|Giulia|13:00;7|Johanneke|16:30;7|Simaf|17:30;
+8|Daphne|11:30;8|Giulia|17:30;8|Johanneke|16:30;
+8|Dewi|18:00;8|Floor|13:00;
+9|Daphne|13:00;9|Fee|13:00/15:00;9|Shenna|17:30;9|Babs|SB;
+10|Daphne|16:00;10|Fee|SB;10|Kim|17:30;
+11|Daphne|16:00;11|Babs|SB;11|Floor|17:30;
+12|Kim|16:00;12|Floor|17:30;12|Simaf|SB;
+13|Daphne|16:30;13|Fee|17:30;13|Giulia|17:30;
+13|Floor|11:30/17:00;13|Simaf|18:00;
+14|Fee|11:30;14|Giulia|17:30;14|Johanneke|16:30;14|Dewi|13:00;
+15|Daphne|11:30;15|Giulia|13:00;15|Shenna|16:30;
+15|Johanneke|17:30;15|Dewi|18:00;
+16|Daphne|16:00;16|Emie|Vrij;16|Shenna|17:30;16|Babs|SB;
+17|Daphne|16:00;17|Babs|17:30;17|Kim|SB;
+18|Daphne|16:00;18|Floor|17:30;18|Simaf|SB;
+19|Emie|17:30;19|Kim|16:00;19|Floor|SB;
+20|Daphne|16:30;20|Fee|17:30;20|Emie|17:30;
+20|Kim|16:30;20|Floor|11:30/17:00;20|Simaf|18:00;
+21|Daphne|11:30;21|Fee|13:00;21|Giulia|17:30;
+21|Johanneke|16:30;21|Dewi|18:00;
+22|Fee|11:30;22|Giulia|17:30;22|Emie|17:30;
+22|Shenna|16:30;22|Floor|13:00;
+23|Daphne|16:00;23|Shenna|17:30;23|Babs|SB;
+24|Daphne|16:00;24|Fee|17:30;24|Kim|SB;
+25|Babs|16:00;25|Floor|17:30;25|Simaf|SB;
+26|Daphne|16:00;26|Kim|SB;26|Floor|17:30;
+27|Daphne|16:30;27|Giulia|17:30;27|Emie|11:30;
+27|Kim|17:30;27|Floor|Vrij;27|Simaf|18:00;
+28|Daphne|11:30;28|Fee|13:00;28|Ruben|17:30;
+28|Giulia|18:00;28|Johanneke|16:30;
+29|Fee|11:30;29|Ruben|17:30;29|Dewi|17:30;
+29|Shenna|16:30;29|Floor|13:00;
+30|Daphne|16:00;30|Shenna|17:30;30|Babs|SB
+`;
+
+const shifts=raw.trim().split(';')
+.map(x=>x.trim()).filter(Boolean)
+.map(x=>{
+const [day,name,time]=x.split('|');
+return {day:Number(day),name,time};
+});
+
+const $=id=>document.getElementById(id);
+
+function get(k,f){
+try{return JSON.parse(localStorage.getItem(k))??f}
+catch{return f}
+}
+function put(k,v){
+localStorage.setItem(k,JSON.stringify(v));
+}
+
+let person=get('kt_person','Babs');
+let selectedDay=6;
+let rosterMode='mine';
+
+let taskItems=get('kt_tasks',[
+{id:'glazen',title:'Glazen en bar netjes achterlaten'},
+{id:'tafels',title:'Tafels en menukaarten schoonmaken'},
+{id:'koeling',title:'Koelingen controleren'},
+{id:'vloer',title:'Vloer vegen'}
+]);
+
+let completed=get('kt_completed',{});
+let focus=get('kt_focus','Gastvrijheid en een nette werkplek.');
+
+function nameDay(d){
+return new Date(2026,10,d).toLocaleDateString('nl-NL',{
+weekday:'long',day:'numeric',month:'long'
+});
+}
+
+function display(t){
+return t==='SB'?'Stand-by':t;
+}
+
+function isShift(s){
+return s.time!=='Vrij';
+}
+
+function shiftHtml(s,showName){
+let left=showName?s.name:nameDay(s.day);
+return `<div class="shift">
+<b>${left}</b>
+<span class="${s.time==='SB'?'standby':''}">${display(s.time)}</span>
+</div>`;
+}
+
+function myData(){
+return shifts.filter(s=>s.name===person&&isShift(s))
+.sort((a,b)=>a.day-b.day);
+}
+
+function renderRoster(){
+let mine=myData();
+
+$('myShifts').innerHTML=mine.length
+?mine.map(s=>shiftHtml(s,false)).join('')
+:'Geen diensten gevonden in dit rooster.';
+
+$('nextShifts').innerHTML=mine.length
+?mine.slice(0,3).map(s=>shiftHtml(s,false)).join('')
+:'Geen diensten gevonden.';
+
+let cal=$('calendar');
+cal.innerHTML=['Zo','Ma','Di','Wo','Do','Vr','Za']
+.map(x=>`<div class="weekday">${x}</div>`).join('');
+
+for(let d=1;d<=35;d++){
+if(d>30){
+cal.insertAdjacentHTML('beforeend','<div class="date empty"></div>');
+continue;
+}
+let has=shifts.some(s=>s.day===d&&isShift(s));
+cal.insertAdjacentHTML('beforeend',
+`<button class="date ${d===selectedDay?'selected':''}" data-day="${d}">
+${d}${has?'<i class="dot"></i>':''}
+</button>`);
+}
+
+cal.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{
+selectedDay=Number(b.dataset.day);
+renderRoster();
+});
+
+$('dayTitle').textContent=nameDay(selectedDay);
+
+let dayShifts=shifts.filter(s=>s.day===selectedDay&&isShift(s))
+.sort((a,b)=>(
+a.time==='SB'?1:b.time==='SB'?-1:a.time.localeCompare(b.time)
+));
+
+$('dayShifts').innerHTML=dayShifts.length
+?dayShifts.map(s=>shiftHtml(s,true)).join('')
+:'Geen diensten ingevuld.';
+
+document.querySelectorAll('[data-roster]').forEach(b=>
+b.classList.toggle('active',b.dataset.roster===rosterMode)
+);
+
+$('mineView').style.display=rosterMode==='mine'?'block':'none';
+$('monthView').style.display=rosterMode==='month'?'block':'none';
+}
+
+function renderTasks(){
+let done=completed[person]||{};
+
+$('taskList').innerHTML=taskItems.map(t=>
+`<label class="task ${done[t.id]?'done':''}">
+<input type="checkbox" data-task="${t.id}" ${done[t.id]?'checked':''}>
+<span>${t.title.replace(/</g,'&lt;')}</span>
+</label>`).join('');
+
+$('taskList').querySelectorAll('[data-task]').forEach(c=>c.onchange=()=>{
+completed[person]??={};
+if(c.checked)completed[person][c.dataset.task]=true;
+else delete completed[person][c.dataset.task];
+put('kt_completed',completed);
+renderTasks();
+renderPoints();
+});
+}
+
+function renderPoints(){
+let total=Object.values(completed[person]||{})
+.filter(Boolean).length*10;
+$('homePoints').textContent=total;
+$('pointsTotal').textContent=total;
+}
+
 function render(){
-document.getElementById("homeFocus").textContent=data.focus;
-document.getElementById("focusInput").value=data.focus;
-document.getElementById("homePoints").textContent=data.points+" BP";
-document.getElementById("pointsTotal").textContent=data.points+" BP";
-document.getElementById("taskCount").textContent=data.tasks.filter(x=>!x.done).length+" taken open";
-const list=document.getElementById("taskList");list.innerHTML="";
-data.tasks.forEach((t,i)=>{
-const row=document.createElement("label");row.className="task";
-const cb=document.createElement("input");cb.type="checkbox";cb.checked=t.done;
-cb.onchange=()=>{if(!t.done&&cb.checked)data.points+=10;data.tasks[i].done=cb.checked;save()};
-const span=document.createElement("span");span.textContent=t.name+" · "+t.area;
-row.append(cb,span);list.appendChild(row)})}
-function addTask(){
-const input=document.getElementById("newTask");
-if(!input.value.trim())return;
-data.tasks.push({name:input.value.trim(),area:document.getElementById("newArea").value,done:false});
-input.value="";save()}
-function saveFocus(){data.focus=document.getElementById("focusInput").value.trim()||defaults.focus;save();alert("Weekfocus opgeslagen!")}
+$('person').value=person;
+$('welcome').textContent=person;
+$('profileName').textContent=person;
+$('focusText').textContent=focus;
+$('focusInput').value=focus;
+renderRoster();
+renderTasks();
+renderPoints();
+}
+
+$('person').innerHTML=people.map(n=>`<option>${n}</option>`).join('');
+
+$('person').onchange=e=>{
+person=e.target.value;
+put('kt_person',person);
+render();
+};
+
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{
+document.querySelectorAll('section').forEach(s=>
+s.classList.toggle('active',s.id===b.dataset.page)
+);
+document.querySelectorAll('[data-page]').forEach(n=>
+n.classList.toggle('active',n===b)
+);
+});
+
+document.querySelectorAll('[data-roster]').forEach(b=>b.onclick=()=>{
+rosterMode=b.dataset.roster;
+renderRoster();
+});
+
+$('saveFocus').onclick=()=>{
+focus=$('focusInput').value.trim()||focus;
+put('kt_focus',focus);
+render();
+};
+
+$('addTask').onclick=()=>{
+let title=$('newTask').value.trim();
+if(!title)return;
+taskItems.push({id:'task'+Date.now(),title});
+put('kt_tasks',taskItems);
+$('newTask').value='';
+renderTasks();
+};
+
 render();
 </script>
 </body>
