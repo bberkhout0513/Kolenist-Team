@@ -502,7 +502,10 @@ async function boot(){
   }
 
   try{
-    db=window.supabase.createClient(URL,key);
+db=window.supabase.createClient(
+  'https://nwcoorejmxcbrhiuymin.supabase.co',
+  key.trim()
+);
     const {data}=await db.auth.getUser();
 
     if(data.user){
